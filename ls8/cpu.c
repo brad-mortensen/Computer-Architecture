@@ -76,5 +76,8 @@ void cpu_run(struct cpu *cpu)
 void cpu_init(struct cpu *cpu)
 {
   // TODO: Initialize the PC and other special registers
-  
+  struct cpu *cpu = malloc(sizeof(cpu));
+  cpu->PC = 0;
+  memset(cpu->registers, 0, 8 * sizeof(cpu->registers));
+  memset(cpu->ram, 0, 8);
 }
