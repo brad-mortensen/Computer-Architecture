@@ -2,17 +2,16 @@
 #define _CPU_H_
 
 // Holds all information about the CPU
-struct cpu
+typedef struct cpu
 {
   // TODO
   // PC
-  int pc; // process counter... i think is what that stands for.
+  int PC; // program counter... 
   // registers (array)
   unsigned char registers[8];
   // ram (array);
-  unsigned char ram[120];
-}
-;
+  unsigned char *ram;
+} cpu;
 
 // ALU operations
 enum alu_op
