@@ -11,11 +11,10 @@ int main(int argc, char *argv[])
     fprintf(stderr, "usage: comp filename\n");
     return 1;
   }
-
   struct cpu cpu;
 
   cpu_init(&cpu);
-  cpu_load(&cpu);
+  cpu_load(&cpu, argv[1]);
   cpu_run(&cpu);
 
   return 0;
