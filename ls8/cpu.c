@@ -58,10 +58,11 @@ void alu(struct cpu *cpu, enum alu_op op, unsigned char regA, unsigned char regB
 {
   switch (op)
   {
-  case ALU_MUL:
-    // TODO
+  case MUL:
+    cpu->registers[regA] = cpu->registers[regA] * cpu->registers[regB];
     break;
-
+  default:
+    break;
     // TODO: implement more ALU ops
   }
 }
@@ -87,6 +88,8 @@ void cpu_run(struct cpu *cpu)
     operandA = cpu_ram_read(cpu, cpu->PC + 1);
     operandB = cpu_ram_read(cpu, cpu->PC + 2);
     // 4. switch() over it to decide on a course of action.
+    // printf("ir: %u, ir shifted: %u\n", ir,( ir>> 5) & 0b11111001);
+
     switch (ir)
     {
     // 5. Do whatever the instruction should do according to the spec.
@@ -99,7 +102,6 @@ void cpu_run(struct cpu *cpu)
     case PRN: // PRN, 1 operands
       // Print to the console the decimal integer value stored in the given register
       printf("%d\n", cpu->registers[operandA]);
-
       break;
     case NOP: // NOP, Continue, no ops
       continue;
@@ -107,8 +109,16 @@ void cpu_run(struct cpu *cpu)
       running = 0;
       break;
     default: // instruction not found
-      printf("Unknown instruction at PC: %d", cpu->PC);
-      exit(1);
+      if ((( ir>> 5) & 0b11111001 )== 1)
+      {
+        alu(cpu, ir, operandA, operandB);
+      }
+      else
+      {
+        printf("Unknown instruction at PC: %d", cpu->PC);
+        exit(1);
+      }
+
     }
     cpu->PC += ops;
   }
