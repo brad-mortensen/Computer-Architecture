@@ -10,7 +10,7 @@ typedef struct cpu
   // registers (array)
   unsigned char registers[8];
   // ram (array);
-  unsigned char *ram;
+  unsigned char *ram[256];
 } cpu;
 
 // ALU operations
@@ -32,7 +32,7 @@ enum alu_op
 
 // Function declarations
 
-extern void cpu_load(struct cpu *cpu);
+extern void cpu_load(struct cpu *cpu, char *filename);
 extern void cpu_init(struct cpu *cpu);
 extern void cpu_run(struct cpu *cpu);
 
