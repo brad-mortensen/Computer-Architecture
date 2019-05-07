@@ -54,11 +54,11 @@ void cpu_load(struct cpu *cpu, char *fn_arg)
 /**
  * ALU
  */
-void alu(struct cpu *cpu, enum alu_op op, unsigned char regA, unsigned char regB)
+void alu(struct cpu *cpu, unsigned char op, unsigned char regA, unsigned char regB)
 {
   switch (op)
   {
-  case MUL:
+  case MUL: 
     cpu->registers[regA] = cpu->registers[regA] * cpu->registers[regB];
     break;
   default:
@@ -89,38 +89,36 @@ void cpu_run(struct cpu *cpu)
     operandB = cpu_ram_read(cpu, cpu->PC + 2);
     // 4. switch() over it to decide on a course of action.
     // printf("ir: %u, ir shifted: %u\n", ir,( ir>> 5) & 0b11111001);
-
-    switch (ir)
+    if ((( ir>> 5) & 0b11111001 )== 1)
     {
-    // 5. Do whatever the instruction should do according to the spec.
-    // 6. Move the PC to the next instruction.
-    case LDI: // 2 operands
-      // set the value of a register to an integer
-      cpu->registers[operandA] = operandB;
+      alu(cpu, ir, operandA, operandB);
+    }
+    else
+    {
+        switch (ir)
+      {
+      // 5. Do whatever the instruction should do according to the spec.
+      // 6. Move the PC to the next instruction.
+      case LDI: // 2 operands
+        // set the value of a register to an integer
+        cpu->registers[operandA] = operandB;
 
-      break;
-    case PRN: // PRN, 1 operands
-      // Print to the console the decimal integer value stored in the given register
-      printf("%d\n", cpu->registers[operandA]);
-      break;
-    case NOP: // NOP, Continue, no ops
-      continue;
-    case HLT: // HLT, no operands
-      running = 0;
-      break;
-    default: // instruction not found
-      if ((( ir>> 5) & 0b11111001 )== 1)
-      {
-        alu(cpu, ir, operandA, operandB);
-      }
-      else
-      {
+        break;
+      case PRN: // PRN, 1 operands
+        // Print to the console the decimal integer value stored in the given register
+        printf("%d\n", cpu->registers[operandA]);
+        break;
+      case NOP: // NOP, Continue, no ops
+        continue;
+      case HLT: // HLT, no operands
+        running = 0;
+        break;
+      default: // instruction not found
         printf("Unknown instruction at PC: %d", cpu->PC);
         exit(1);
       }
-
     }
-    cpu->PC += ops;
+    cpu->PC += ops;    
   }
 }
 
