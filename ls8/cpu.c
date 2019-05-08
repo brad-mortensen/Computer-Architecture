@@ -58,7 +58,7 @@ void alu(struct cpu *cpu, unsigned char op, unsigned char regA, unsigned char re
 {
   switch (op)
   {
-  case MUL: 
+  case MUL:
     cpu->registers[regA] = cpu->registers[regA] * cpu->registers[regB];
     break;
   default:
@@ -89,13 +89,13 @@ void cpu_run(struct cpu *cpu)
     operandB = cpu_ram_read(cpu, cpu->PC + 2);
     // 4. switch() over it to decide on a course of action.
     // printf("ir: %u, ir shifted: %u\n", ir,( ir>> 5) & 0b11111001);
-    if ((( ir>> 5) & 0b11111001 )== 1)
+    if (((ir >> 5) & 0b11111001) == 1)
     {
       alu(cpu, ir, operandA, operandB);
     }
     else
     {
-        switch (ir)
+      switch (ir)
       {
       // 5. Do whatever the instruction should do according to the spec.
       // 6. Move the PC to the next instruction.
@@ -118,7 +118,7 @@ void cpu_run(struct cpu *cpu)
         exit(1);
       }
     }
-    cpu->PC += ops;    
+    cpu->PC += ops;
   }
 }
 
