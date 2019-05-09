@@ -89,8 +89,6 @@ void cpu_run(struct cpu *cpu)
     operandA = cpu_ram_read(cpu, cpu->PC + 1);
     operandB = cpu_ram_read(cpu, cpu->PC + 2);
     // 4. switch() over it to decide on a course of action.
-    // printf("ir: %u, ir shifted: %u\n", ir,( ir>> 5) & 0b11111001);
-
     if (((ir >> 5) & 0b11111001) == 1)
     {
       alu(cpu, ir, operandA, operandB);
@@ -99,9 +97,13 @@ void cpu_run(struct cpu *cpu)
     {
       switch (ir)
       {
-        // 5. Do whatever the instruction should do according to the spec.
+      // 5. Do whatever the instruction should do according to the spec.
+      case CALL:
+        break;
+      case RET:
+        break;
       case PUSH:
-        // 1. Decrement the `SP` held in R7.        
+        // 1. Decrement the `SP` held in R7.
         cpu->registers[SP]--;
         // 2. Copy the value in the given register to the address pointed to by `SP`.
         cpu->ram[cpu->registers[SP]] = cpu->registers[operandA];
@@ -109,7 +111,7 @@ void cpu_run(struct cpu *cpu)
       case POP:
         // 1. Copy the value from the address pointed to by `SP` to the given register.
         cpu->registers[operandA] = cpu->ram[cpu->registers[SP]];
-        // 2. Increment `SP`.        
+        // 2. Increment `SP`.
         cpu->registers[SP]++;
 
         break;
