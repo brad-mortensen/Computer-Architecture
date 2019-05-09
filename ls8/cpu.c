@@ -99,8 +99,17 @@ void cpu_run(struct cpu *cpu)
       {
       // 5. Do whatever the instruction should do according to the spec.
       case CALL:
+        // Push return address to the stack
+        cpu->registers[SP]--;
+        cpu_ram_write(cpu, cpu->registers[SP], cpu->PC + 2);
+
+        // set the pc
+        cpu->PC = cpu->registers[operandA];
         break;
       case RET:
+        cpu->PC = cpu_ram_read(cpu, cpu->registers[SP]);
+        // 2. Increment `SP`.
+        cpu->registers[SP]++;
         break;
       case PUSH:
         // 1. Decrement the `SP` held in R7.
