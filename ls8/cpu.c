@@ -61,6 +61,9 @@ void alu(struct cpu *cpu, unsigned char op, unsigned char regA, unsigned char re
   case MUL:
     cpu->registers[regA] = cpu->registers[regA] * cpu->registers[regB];
     break;
+  case ADD:
+    cpu->registers[regA] = cpu->registers[regA] + cpu->registers[regB];
+    break;
   default:
     break;
     // TODO: implement more ALU ops
@@ -101,13 +104,13 @@ void cpu_run(struct cpu *cpu)
       case CALL:
         // Push return address to the stack
         cpu->registers[SP]--;
-        cpu_ram_write(cpu, cpu->registers[SP], cpu->PC + 2);
+        cpu_ram_write(cpu, cpu->registers[SP], cpu->PC + ops);
 
         // set the pc
-        cpu->PC = cpu->registers[operandA];
+        cpu->PC = cpu->registers[operandA] - ops;
         break;
       case RET:
-        cpu->PC = cpu_ram_read(cpu, cpu->registers[SP]);
+        cpu->PC = cpu_ram_read(cpu, cpu->registers[SP]) - ops;
         // 2. Increment `SP`.
         cpu->registers[SP]++;
         break;
@@ -115,11 +118,11 @@ void cpu_run(struct cpu *cpu)
         // 1. Decrement the `SP` held in R7.
         cpu->registers[SP]--;
         // 2. Copy the value in the given register to the address pointed to by `SP`.
-        cpu->ram[cpu->registers[SP]] = cpu->registers[operandA];
+        cpu_ram_write(cpu, cpu->registers[SP], cpu->registers[operandA]);
         break;
       case POP:
         // 1. Copy the value from the address pointed to by `SP` to the given register.
-        cpu->registers[operandA] = cpu->ram[cpu->registers[SP]];
+        cpu->registers[operandA] = cpu_ram_read(cpu, cpu->registers[SP]);
         // 2. Increment `SP`.
         cpu->registers[SP]++;
 
