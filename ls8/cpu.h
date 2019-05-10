@@ -39,6 +39,8 @@ typedef struct cpu
 #define CALL 0b01010000
 #define RET 0b00010001
 #define JMP 0b01010100
+#define JEQ 0b01010101 
+#define JNE 0b01010110
 
 
 #define SP 7

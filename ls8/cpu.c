@@ -64,6 +64,18 @@ void alu(struct cpu *cpu, unsigned char op, unsigned char regA, unsigned char re
   case ADD:
     cpu->registers[regA] = cpu->registers[regA] + cpu->registers[regB];
     break;
+  case JNE:
+    if(cpu->FL & 0b00000001 != 1)
+    {
+      cpu->PC = cpu->registers[regA];
+    }
+    break;
+  case JEQ:
+    if(cpu->FL & 0b00000001 == 1)
+    {
+      cpu->PC = cpu->registers[regA];
+    }
+    break;
   case CMP:
     if (regA == regB)
     {
