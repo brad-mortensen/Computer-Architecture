@@ -8,6 +8,7 @@ typedef struct cpu
   // PC
   int PC; // program counter... 
   // registers (array)
+  unsigned char FL;
   unsigned char registers[8];
   // ram (array);
   unsigned char ram[256];
@@ -32,10 +33,12 @@ typedef struct cpu
 #define NOP 0b00000000
 #define MUL 0b10100010
 #define ADD 0b10100000
+#define CMP 0b10100111
 #define PUSH 0b01000101
 #define POP 0b01000110
 #define CALL 0b01010000
 #define RET 0b00010001
+#define JMP 0b01010100
 
 
 #define SP 7

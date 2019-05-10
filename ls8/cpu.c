@@ -64,6 +64,25 @@ void alu(struct cpu *cpu, unsigned char op, unsigned char regA, unsigned char re
   case ADD:
     cpu->registers[regA] = cpu->registers[regA] + cpu->registers[regB];
     break;
+  case CMP:
+    if (regA == regB)
+    {
+      // set the equal flag on
+      cpu->FL |= 0b00000001;
+    }
+    else if (regA<regB)
+    {
+      // Set the L flag on
+      cpu->FL |= 0b00000100;
+    }
+    else
+    {
+      // Set greater than flag on
+      cpu->FL |= 0b00000010;
+    }
+    
+    
+    break;
   default:
     break;
     // TODO: implement more ALU ops
@@ -79,7 +98,7 @@ void cpu_run(struct cpu *cpu)
   unsigned char operandA;
   unsigned char operandB;
   cpu->registers[SP] = 0xf4; // Stack pointer initialized to ff
-
+  cpu->FL = 0;
   while (running)
   {
     unsigned int ops;
@@ -101,6 +120,8 @@ void cpu_run(struct cpu *cpu)
       switch (ir)
       {
       // 5. Do whatever the instruction should do according to the spec.
+      case JMP:
+        cpu->PC = cpu->registers[operandA];
       case CALL:
         // Push return address to the stack
         cpu->registers[SP]--;
