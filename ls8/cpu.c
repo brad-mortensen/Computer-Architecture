@@ -125,7 +125,6 @@ void cpu_run(struct cpu *cpu)
         cpu->registers[operandA] = cpu_ram_read(cpu, cpu->registers[SP]);
         // 2. Increment `SP`.
         cpu->registers[SP]++;
-
         break;
       case LDI: // 2 operands
         // set the value of a register to an integer
